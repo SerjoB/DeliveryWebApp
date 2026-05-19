@@ -42,9 +42,9 @@ public class OrdersController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(OrderDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create([FromBody] CreateOrderDto dto)
+    public async Task<IActionResult> Create([FromBody] CreateOrderDto dto, CancellationToken ct = default)
     {
-        var order = await _orderService.CreateAsync(dto);
+        var order = await _orderService.CreateAsync(dto, ct);
         return CreatedAtAction(nameof(GetById), new { id = order.Id }, order);
     }
 }

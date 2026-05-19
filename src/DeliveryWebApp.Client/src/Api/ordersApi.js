@@ -1,5 +1,6 @@
-﻿const BASE_URL = "http://localhost:5285/api";
+﻿import { config } from "../config.js"
 
+const BASE_URL = config.apiUrl;
 const handleResponse = async (response) => {
     if (!response.ok) {
         const error = await response.json().catch(() => ({}));

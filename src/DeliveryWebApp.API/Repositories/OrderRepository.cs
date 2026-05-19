@@ -21,9 +21,9 @@ public class OrderRepository : IOrderRepository
     public Task<Order?> GetByIdAsync(int id, CancellationToken ct = default) =>
         _context.Orders.FirstOrDefaultAsync(o => o.Id == id, ct);
 
-    public async Task AddAsync(Order order) =>
-        await _context.Orders.AddAsync(order);
+    public async Task AddAsync(Order order, CancellationToken ct = default) =>
+        await _context.Orders.AddAsync(order, ct);
 
-    public Task SaveChangesAsync() =>
-        _context.SaveChangesAsync(); 
+    public Task SaveChangesAsync(CancellationToken ct = default) =>
+        _context.SaveChangesAsync(ct); 
 }

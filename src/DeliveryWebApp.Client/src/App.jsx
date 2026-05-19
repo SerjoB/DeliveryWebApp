@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import OrderListPage from "./pages/OrderListPage";
-import CreateOrderPage from "./pages/CreateOrderPage";
-import OrderDetailPage from "./pages/OrderDetailPage";
+import OrderListPage from "./Pages/OrderListPage";
+import CreateOrderPage from "./Pages/CreateOrderPage";
+import OrderDetailPage from "./Pages/OrderDetailPage";
 
 export default function App() {
     return (

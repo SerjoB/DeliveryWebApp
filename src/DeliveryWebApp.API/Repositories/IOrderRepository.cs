@@ -6,6 +6,6 @@ public interface IOrderRepository
 {
     Task<List<Order>> GetAllAsync(CancellationToken ct = default);
     Task<Order?> GetByIdAsync(int id, CancellationToken ct = default);
-    Task AddAsync(Order order);
-    Task SaveChangesAsync();
+    Task AddAsync(Order order, CancellationToken ct = default);
+    Task SaveChangesAsync(CancellationToken ct = default);
 }

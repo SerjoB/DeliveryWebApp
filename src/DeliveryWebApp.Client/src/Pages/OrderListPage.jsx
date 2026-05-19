@@ -1,6 +1,6 @@
 ﻿import { useNavigate } from "react-router-dom";
-import { ordersApi } from "../api/ordersApi";
-import {useAsync} from "../hooks/useAsync.js";
+import { ordersApi } from "../Api/ordersApi";
+import {useAsync} from "../Hooks/useAsync.js";
 
 export default function OrderListPage() {
     const { data: orders, loading, error } = useAsync(() => ordersApi.getAll());

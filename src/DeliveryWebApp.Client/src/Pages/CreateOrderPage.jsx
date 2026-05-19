@@ -1,7 +1,6 @@
 ﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ordersApi } from "../api/ordersApi";
-import {useAsync} from "../hooks/useAsync.js";
+import { ordersApi } from "../Api/ordersApi";
 
 const initialForm = {
     senderCity: "",
