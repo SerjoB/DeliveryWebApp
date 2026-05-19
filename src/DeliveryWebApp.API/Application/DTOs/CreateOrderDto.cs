@@ -1,22 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using DeliveryWebApp.API.Application.Validation;
 
 namespace DeliveryWebApp.API.Application.DTOs;
 
 public class CreateOrderDto
 {
-    [Required(ErrorMessage = "Город отправителя обязателен")]
+    [Required(ErrorMessage = "Город отправителя обязателен", AllowEmptyStrings = false)]
     [MaxLength(100)]
     public string SenderCity { get; init; } = string.Empty;
 
-    [Required(ErrorMessage = "Адрес отправителя обязателен")]
+    [Required(ErrorMessage = "Адрес отправителя обязателен", AllowEmptyStrings = false)]
     [MaxLength(200)]
     public string SenderAddress { get; init; } = string.Empty;
 
-    [Required(ErrorMessage = "Город получателя обязателен")]
+    [Required(ErrorMessage = "Город получателя обязателен", AllowEmptyStrings = false)]
     [MaxLength(100)]
     public string ReceiverCity { get; init; } = string.Empty;
 
-    [Required(ErrorMessage = "Адрес получателя обязателен")]
+    [Required(ErrorMessage = "Адрес получателя обязателен", AllowEmptyStrings = false)]
     [MaxLength(200)]
     public string ReceiverAddress { get; init; } = string.Empty;
 
@@ -25,5 +26,6 @@ public class CreateOrderDto
     public double WeightKg { get; init; }
 
     [Required(ErrorMessage = "Дата забора груза обязательна")]
+    [FutureDate]
     public DateOnly PickupDate { get; init; }
 }

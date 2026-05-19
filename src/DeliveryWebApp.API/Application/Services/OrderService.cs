@@ -28,10 +28,10 @@ public class OrderService : IOrderService
     public async Task<OrderDto> CreateAsync(CreateOrderDto dto)
     {
         var order = Order.Create(
-            dto.SenderCity,
-            dto.SenderAddress,
-            dto.ReceiverCity,
-            dto.ReceiverAddress,
+            dto.SenderCity.Trim(),
+            dto.SenderAddress.Trim(),
+            dto.ReceiverCity.Trim(),
+            dto.ReceiverAddress.Trim(),
             dto.WeightKg,
             dto.PickupDate);
 
