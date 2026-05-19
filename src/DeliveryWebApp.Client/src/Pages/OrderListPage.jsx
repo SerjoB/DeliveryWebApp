@@ -1,61 +1,78 @@
-﻿import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+﻿import { useNavigate } from "react-router-dom";
 import { ordersApi } from "../api/ordersApi";
+import {useAsync} from "../hooks/useAsync.js";
 
 export default function OrderListPage() {
-    const [orders, setOrders] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const { data: orders, loading, error } = useAsync(() => ordersApi.getAll());
     const navigate = useNavigate();
 
-    useEffect(() => {
-        ordersApi.getAll()
-            .then(setOrders)
-            .catch((e) => setError(e.message))
-            .finally(() => setLoading(false));
-    }, []);
+    if (loading) return (
+        <div className="d-flex justify-content-center mt-5">
+            <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Загрузка...</span>
+            </div>
+        </div>
+    );
 
-    if (loading) return <p>Загрузка...</p>;
-    if (error) return <p>Ошибка: {error}</p>;
+    if (error) return (
+        <div className="container mt-4">
+            <div className="alert alert-danger">{error}</div>
+        </div>
+    );
 
     return (
-        <div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <h1>Список заказов</h1>
-                <button onClick={() => navigate("/orders/create")}>
+        <div className="container mt-4">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h1 className="h3 mb-0">Список заказов</h1>
+                <button
+                    className="btn btn-primary"
+                    onClick={() => navigate("/orders/create")}
+                >
                     Создать заказ
                 </button>
             </div>
 
             {orders.length === 0 ? (
-                <p>Заказов пока нет</p>
+                <div className="alert alert-info">Заказов пока нет</div>
             ) : (
-                <table border="1" cellPadding="8" style={{ width: "100%", borderCollapse: "collapse" }}>
-                    <thead>
-                    <tr>
-                        <th>Номер заказа</th>
-                        <th>Откуда</th>
-                        <th>Куда</th>
-                        <th>Вес (кг)</th>
-                        <th>Дата забора</th> 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {orders.map((order) => (
-                        <tr
-                            key={order.id}
-                            onClick={() => navigate(`/orders/${order.id}`)}
-                            style={{ cursor: "pointer" }}
-                        >
-                            <td>{order.orderNumber}</td>
-                            <td>{order.senderCity}, {order.senderAddress}</td>
-                            <td>{order.receiverCity}, {order.receiverAddress}</td>
-                            <td>{order.weightKg}</td>
-                            <td>{order.pickupDate}</td>
+                <div className="table-responsive">
+                    <table className="table table-hover table-bordered align-middle">
+                        <thead className="table-light">
+                        <tr>
+                            <th>Номер заказа</th>
+                            <th>Откуда</th>
+                            <th>Куда</th>
+                            <th>Вес (кг)</th>
+                            <th>Дата забора</th>
                         </tr>
-                    ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {orders.map((order) => (
+                            <tr
+                                key={order.id}
+                                onClick={() => navigate(`/orders/${order.id}`)}
+                                style={{ cursor: "pointer" }}
+                            >
+                                <td>{order.orderNumber}</td>
+                                <td className="text-truncate-cell" title={`${order.senderCity}, ${order.senderAddress}`}>
+                                    {order.senderCity}, {order.senderAddress}
+                                </td>
+                                <td className="text-truncate-cell" title={`${order.receiverCity}, ${order.receiverAddress}`}>
+                                    {order.receiverCity}, {order.receiverAddress}
+                                </td>
+                                <td>{order.weightKg}</td>
+                                <td>
+                                    {new Date(order.pickupDate).toLocaleDateString("ru-RU", {
+                                        year: "numeric",
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                    })}
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
         </div>
     );

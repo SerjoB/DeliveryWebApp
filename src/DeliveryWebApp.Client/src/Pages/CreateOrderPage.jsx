@@ -1,6 +1,7 @@
 ﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ordersApi } from "../api/ordersApi";
+import {useAsync} from "../hooks/useAsync.js";
 
 const initialForm = {
     senderCity: "",
@@ -16,6 +17,8 @@ export default function CreateOrderPage() {
     const [error, setError] = useState(null);
     const [submitting, setSubmitting] = useState(false);
     const navigate = useNavigate();
+
+    const today = new Date().toISOString().split("T")[0];
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -42,41 +45,125 @@ export default function CreateOrderPage() {
     };
 
     return (
-        <div>
-            <h1>Создать заказ</h1>
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Город отправителя</label>
-                    <input name="senderCity" value={form.senderCity} onChange={handleChange} required />
+        <div className="container mt-4">
+            <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <div className="card shadow-sm">
+                        <div className="card-body">
+                            <h1 className="card-title h3 mb-4">Создать заказ</h1>
+
+                            {error && (
+                                <div className="alert alert-danger">{error}</div>
+                            )}
+
+                            <form onSubmit={handleSubmit}>
+                                <fieldset className="mb-3">
+                                    <legend className="h6 text-muted">Отправитель</legend>
+                                    <div className="mb-3">
+                                        <label className="form-label">Город</label>
+                                        <input
+                                            className="form-control"
+                                            name="senderCity"
+                                            value={form.senderCity}
+                                            onChange={handleChange}
+                                            placeholder="Москва"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">Адрес</label>
+                                        <input
+                                            className="form-control"
+                                            name="senderAddress"
+                                            value={form.senderAddress}
+                                            onChange={handleChange}
+                                            placeholder="ул. Ленина, д. 1"
+                                            required
+                                        />
+                                    </div>
+                                </fieldset>
+
+                                <fieldset className="mb-3">
+                                    <legend className="h6 text-muted">Получатель</legend>
+                                    <div className="mb-3">
+                                        <label className="form-label">Город</label>
+                                        <input
+                                            className="form-control"
+                                            name="receiverCity"
+                                            value={form.receiverCity}
+                                            onChange={handleChange}
+                                            placeholder="Санкт-Петербург"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">Адрес</label>
+                                        <input
+                                            className="form-control"
+                                            name="receiverAddress"
+                                            value={form.receiverAddress}
+                                            onChange={handleChange}
+                                            placeholder="ул. Пушкина, д. 10"
+                                            required
+                                        />
+                                    </div>
+                                </fieldset>
+
+                                <div className="mb-3">
+                                    <label className="form-label">Вес груза (кг)</label>
+                                    <input
+                                        className="form-control"
+                                        name="weightKg"
+                                        type="number"
+                                        step="0.1"
+                                        min="0.1"
+                                        max="10000"
+                                        value={form.weightKg}
+                                        onChange={handleChange}
+                                        placeholder="10.5"
+                                        required
+                                    />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="form-label">Дата забора груза</label>
+                                    <input
+                                        className="form-control"
+                                        name="pickupDate"
+                                        type="date"
+                                        min={today}
+                                        value={form.pickupDate}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+
+                                <div className="d-flex gap-2">
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary"
+                                        disabled={submitting}
+                                    >
+                                        {submitting ? (
+                                            <>
+                                                <span className="spinner-border spinner-border-sm me-2" role="status" />
+                                                Создание...
+                                            </>
+                                        ) : "Создать"}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline-secondary"
+                                        onClick={() => navigate("/orders")}
+                                    >
+                                        Отмена
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <label>Адрес отправителя</label>
-                    <input name="senderAddress" value={form.senderAddress} onChange={handleChange} required />
-                </div>
-                <div>
-                    <label>Город получателя</label>
-                    <input name="receiverCity" value={form.receiverCity} onChange={handleChange} required />
-                </div>
-                <div>
-                    <label>Адрес получателя</label>
-                    <input name="receiverAddress" value={form.receiverAddress} onChange={handleChange} required />
-                </div>
-                <div>
-                    <label>Вес груза (кг)</label>
-                    <input name="weightKg" type="number" step="0.1" min="0.1" value={form.weightKg} onChange={handleChange} required />
-                </div>
-                <div>
-                    <label>Дата забора груза</label>
-                    <input name="pickupDate" type="date" min={new Date().toISOString().split("T")[0]} value={form.pickupDate} onChange={handleChange} required />
-                </div>
-                <button type="submit" disabled={submitting}>
-                    {submitting ? "Создание..." : "Создать"}
-                </button>
-                <button type="button" onClick={() => navigate("/orders")}>
-                    Отмена
-                </button>
-            </form>
+            </div>
         </div>
     );
 }
