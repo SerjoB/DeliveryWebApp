@@ -11,3 +11,7 @@ appsettings.Development.json
 
 # Docker volumes
 postgres_data/
+
+# Node
+src/DeliveryWebApp.Client/node_modules/
+src/DeliveryWebApp.Client/dist/
