@@ -1,5 +1,6 @@
 using DeliveryWebApp.API.Application.Services;
 using DeliveryWebApp.API.Data;
+using DeliveryWebApp.API.Middleware;
 using DeliveryWebApp.API.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,9 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
+
+// Middleware pipeline
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

@@ -13,15 +13,15 @@ public class OrderService : IOrderService
         _repository = repository;
     }
 
-    public async Task<List<OrderDto>> GetAllAsync()
+    public async Task<List<OrderDto>> GetAllAsync(CancellationToken ct = default)
     {
-        var orders = await _repository.GetAllAsync();
+        var orders = await _repository.GetAllAsync(ct);
         return orders.Select(MapToDto).ToList();
     }
 
-    public async Task<OrderDto?> GetByIdAsync(int id)
+    public async Task<OrderDto?> GetByIdAsync(int id, CancellationToken ct = default)
     {
-        var order = await _repository.GetByIdAsync(id);
+        var order = await _repository.GetByIdAsync(id, ct);
         return order is null ? null : MapToDto(order);
     }
 

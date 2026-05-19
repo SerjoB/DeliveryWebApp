@@ -18,9 +18,9 @@ public class OrdersController : ControllerBase
     // GET api/orders
     [HttpGet]
     [ProducesResponseType(typeof(List<OrderDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(CancellationToken ct = default)
     {
-        var orders = await _orderService.GetAllAsync();
+        var orders = await _orderService.GetAllAsync(ct);
         return Ok(orders);
     }
 
@@ -28,9 +28,9 @@ public class OrdersController : ControllerBase
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetById(int id, CancellationToken ct = default)
     {
-        var order = await _orderService.GetByIdAsync(id);
+        var order = await _orderService.GetByIdAsync(id, ct);
 
         if (order is null)
             return NotFound(new { message = $"Заказ с id={id} не найден" });

@@ -13,13 +13,13 @@ public class OrderRepository : IOrderRepository
         _context = context;
     }
 
-    public Task<List<Order>> GetAllAsync() =>
+    public Task<List<Order>> GetAllAsync(CancellationToken ct = default) =>
         _context.Orders
             .OrderByDescending(o => o.CreatedAt)
-            .ToListAsync();
+            .ToListAsync(ct);
 
-    public Task<Order?> GetByIdAsync(int id) =>
-        _context.Orders.FirstOrDefaultAsync(o => o.Id == id);
+    public Task<Order?> GetByIdAsync(int id, CancellationToken ct = default) =>
+        _context.Orders.FirstOrDefaultAsync(o => o.Id == id, ct);
 
     public async Task AddAsync(Order order) =>
         await _context.Orders.AddAsync(order);
