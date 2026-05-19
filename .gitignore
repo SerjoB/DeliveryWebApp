@@ -1,0 +1,13 @@
+﻿# .NET
+bin/
+obj/
+*.user
+.vs/
+.idea/
+*.suo
+
+# Environment
+appsettings.Development.json
+
+# Docker volumes
+postgres_data/
