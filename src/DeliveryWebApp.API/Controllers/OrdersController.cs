@@ -1,0 +1,50 @@
+﻿using DeliveryWebApp.API.Application.DTOs;
+using DeliveryWebApp.API.Application.Services;
+using Microsoft.AspNetCore.Mvc;
+
+namespace DeliveryWebApp.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class OrdersController : ControllerBase
+{
+    private readonly IOrderService _orderService;
+
+    public OrdersController(IOrderService orderService)
+    {
+        _orderService = orderService;
+    }
+
+    // GET api/orders
+    [HttpGet]
+    [ProducesResponseType(typeof(List<OrderDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll()
+    {
+        var orders = await _orderService.GetAllAsync();
+        return Ok(orders);
+    }
+
+    // GET api/orders/id
+    [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var order = await _orderService.GetByIdAsync(id);
+
+        if (order is null)
+            return NotFound(new { message = $"Заказ с id={id} не найден" });
+
+        return Ok(order);
+    }
+
+    // POST api/orders
+    [HttpPost]
+    [ProducesResponseType(typeof(OrderDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create([FromBody] CreateOrderDto dto)
+    {
+        var order = await _orderService.CreateAsync(dto);
+        return CreatedAtAction(nameof(GetById), new { id = order.Id }, order);
+    }
+}
