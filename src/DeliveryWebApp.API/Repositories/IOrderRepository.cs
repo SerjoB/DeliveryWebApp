@@ -1,10 +1,11 @@
-﻿using DeliveryWebApp.API.Data.Models;
+﻿using DeliveryWebApp.API.Application.DTOs;
+using DeliveryWebApp.API.Data.Models;
 
 namespace DeliveryWebApp.API.Repositories;
 
 public interface IOrderRepository
 {
-    Task<List<Order>> GetAllAsync(CancellationToken ct = default);
+    Task<(List<Order> Items, int TotalCount)> GetAllAsync(int page, int pageSize, CancellationToken ct = default);
     Task<Order?> GetByIdAsync(int id, CancellationToken ct = default);
     Task AddAsync(Order order, CancellationToken ct = default);
     Task SaveChangesAsync(CancellationToken ct = default);

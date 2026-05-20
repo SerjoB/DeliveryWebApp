@@ -13,10 +13,18 @@ public class OrderRepository : IOrderRepository
         _context = context;
     }
 
-    public Task<List<Order>> GetAllAsync(CancellationToken ct = default) =>
-        _context.Orders
+    public async Task<(List<Order> Items, int TotalCount)> GetAllAsync(int page, int pageSize, CancellationToken ct = default)
+    {
+        var totalCount = await _context.Orders.CountAsync(ct);
+
+        var items = await _context.Orders
             .OrderByDescending(o => o.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync(ct);
+
+        return (items, totalCount);
+    }
 
     public Task<Order?> GetByIdAsync(int id, CancellationToken ct = default) =>
         _context.Orders.FirstOrDefaultAsync(o => o.Id == id, ct);

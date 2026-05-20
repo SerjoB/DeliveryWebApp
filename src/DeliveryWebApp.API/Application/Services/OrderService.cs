@@ -15,11 +15,19 @@ public class OrderService : IOrderService
         _logger = logger;
     }
 
-    public async Task<List<OrderDto>> GetAllAsync(CancellationToken ct = default)
+    public async Task<PagedResult<OrderDto>> GetAllAsync(int page, int pageSize, CancellationToken ct = default)
     {
-        var orders = await _repository.GetAllAsync(ct);
-        _logger.LogInformation("Получено {Count} заказов", orders.Count);
-        return orders.Select(MapToDto).ToList();
+        var (items, totalCount) = await _repository.GetAllAsync(page, pageSize, ct);
+
+        _logger.LogInformation("Получено {Count} заказов", items.Count);
+
+        return new PagedResult<OrderDto>
+        {
+            Items = items.Select(MapToDto).ToList(),
+            TotalCount = totalCount,
+            Page = page,
+            PageSize = pageSize
+        };
     }
 
     public async Task<OrderDto?> GetByIdAsync(int id, CancellationToken ct = default)

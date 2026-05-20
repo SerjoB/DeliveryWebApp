@@ -17,11 +17,14 @@ public class OrdersController : ControllerBase
 
     // GET api/orders
     [HttpGet]
-    [ProducesResponseType(typeof(List<OrderDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAll(CancellationToken ct = default)
+    [ProducesResponseType(typeof(PagedResult<OrderDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        CancellationToken ct = default)
     {
-        var orders = await _orderService.GetAllAsync(ct);
-        return Ok(orders);
+        var result = await _orderService.GetAllAsync(page, pageSize, ct);
+        return Ok(result);
     }
 
     // GET api/orders/id

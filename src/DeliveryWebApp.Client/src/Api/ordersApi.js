@@ -16,8 +16,9 @@ const handleResponse = async (response) => {
 };
 
 export const ordersApi = {
-    getAll: () =>
-        fetch(`${BASE_URL}/orders`).then(handleResponse),
+    getAll: (page = 1, pageSize = 10) =>
+        fetch(`${BASE_URL}/orders?page=${page}&pageSize=${pageSize}`)
+            .then(handleResponse),
 
     getById: (id) =>
         fetch(`${BASE_URL}/orders/${id}`).then(handleResponse),
