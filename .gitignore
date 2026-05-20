@@ -17,4 +17,4 @@ src/DeliveryWebApp.Client/node_modules/
 src/DeliveryWebApp.Client/dist/
 
 # Client config
-src/DeliveryApp.Client/src/config.js
+src/DeliveryWebApp.Client/src/config.js

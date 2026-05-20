@@ -1,7 +1,7 @@
 ﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ordersApi } from "../api/ordersApi";
-import { useAsync } from "../hooks/useAsync";
+import { ordersApi } from "../Api/ordersApi";
+import { useAsync } from "../Hooks/useAsync";
 
 export default function OrderListPage() {
     const [page, setPage] = useState(1);

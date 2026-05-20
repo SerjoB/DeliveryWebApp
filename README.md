@@ -68,14 +68,15 @@ cd DeliveryWebApp
 ```bash
 # Скопировать и настроить конфигурацию
 cp src/DeliveryWebApp.API/appsettings.Development.example.json src/DeliveryWebApp.API/appsettings.Development.json
-# Указать данные вашей БД и порт вашего клиента в appsettings.Development.json
+# Указать данные вашей БД в appsettings.Development.json
 
 cd src/DeliveryWebApp.API
 dotnet run
 ```
 
-3. 
+3. Обновить конфигурацию клиента
 ```bash
+# Перейти в папку DeliveryWebApp
 # Скопировать и настроить конфигурацию
 cp src/DeliveryWebApp.Client/src/config.example.js src/DeliveryWebApp.Client/src/config.js
 # Указать в config.js порт своего API
@@ -88,3 +89,8 @@ bun run dev
 API будет доступен на http://localhost:{PORT}  
 Swagger UI на http://localhost:{PORT}/Swagger
 Клиент будет доступен на http://localhost:{PORT}
+
+
+**⚠️ WARNING**
+
+Если порт 5273 занят для вас, то необходимо в файле appsettings.Development.json изменить порт на котором запускается ваш клиент.
