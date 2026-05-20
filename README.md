@@ -93,4 +93,4 @@ Swagger UI на http://localhost:{PORT}/Swagger
 
 **⚠️ WARNING**
 
-Если порт 5273 занят для вас, то необходимо в файле appsettings.Development.json изменить порт на котором запускается ваш клиент.
+Если порт 5173 занят для вас, то необходимо в файле appsettings.Development.json изменить порт на котором запускается ваш клиент.
