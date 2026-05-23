@@ -1,6 +1,6 @@
 ﻿import { useNavigate, useSearchParams } from "react-router-dom";
-import { ordersApi } from "../api/ordersApi";
-import { useAsync } from "../hooks/useAsync";
+import { ordersApi } from "../Api/ordersApi";
+import { useAsync } from "../Hooks/useAsync";
 
 export default function OrderListPage() {
     const [searchParams, setSearchParams] = useSearchParams();
