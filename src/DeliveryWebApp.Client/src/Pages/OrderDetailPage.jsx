@@ -3,8 +3,8 @@ import { ordersApi } from "../Api/ordersApi";
 import {useAsync} from "../Hooks/useAsync.js";
 
 export default function OrderDetailPage() {
-    const { id } = useParams();
-    const { data: order, loading, error } = useAsync(() => ordersApi.getById(id), [id]);
+    const { orderNumber } = useParams();
+    const { data: order, loading, error } = useAsync(() => ordersApi.getByOrderNumber(orderNumber), [orderNumber]);
     const navigate = useNavigate();
 
     if (loading) return (

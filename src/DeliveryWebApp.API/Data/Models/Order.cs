@@ -11,7 +11,7 @@ public class Order
     public string ReceiverCity { get; private set; } = string.Empty;
     public string ReceiverAddress { get; private set; } = string.Empty;
 
-    public double WeightKg { get; private set; }
+    public decimal WeightKg { get; private set; }
     public DateOnly PickupDate { get; private set; }
 
     public DateTime CreatedAt { get; private set; }
@@ -22,7 +22,7 @@ public class Order
         string senderAddress,
         string receiverCity,
         string receiverAddress,
-        double weightKg,
+        decimal weightKg,
         DateOnly pickupDate)
     {
         return new Order

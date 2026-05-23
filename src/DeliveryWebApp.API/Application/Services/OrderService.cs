@@ -30,12 +30,12 @@ public class OrderService : IOrderService
         };
     }
 
-    public async Task<OrderDto?> GetByIdAsync(int id, CancellationToken ct = default)
+    public async Task<OrderDto?> GetByOrderNumberAsync(string orderNumber, CancellationToken ct = default)
     {
-        var order = await _repository.GetByIdAsync(id, ct);
+        var order = await _repository.GetByOrderNumberAsync(orderNumber, ct);
         if (order is not null) return MapToDto(order);
         
-        _logger.LogWarning("Заказ с id={Id} не найден", id);
+        _logger.LogWarning("Заказ с orderNumber={orderNumber} не найден", orderNumber);
         return null;
     }
 

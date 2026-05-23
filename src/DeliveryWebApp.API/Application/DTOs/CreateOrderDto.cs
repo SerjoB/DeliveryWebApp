@@ -23,7 +23,7 @@ public class CreateOrderDto
 
     [Required(ErrorMessage = "Вес груза обязателен")]
     [Range(0.1, 10000, ErrorMessage = "Вес должен быть от 0.1 до 10000 кг")]
-    public double WeightKg { get; init; }
+    public decimal WeightKg { get; init; }
 
     [Required(ErrorMessage = "Дата забора груза обязательна")]
     [FutureDate]

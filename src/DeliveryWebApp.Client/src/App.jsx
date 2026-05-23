@@ -10,7 +10,7 @@ export default function App() {
                 <Route path="/" element={<Navigate to="/orders" replace />} />
                 <Route path="/orders" element={<OrderListPage />} />
                 <Route path="/orders/create" element={<CreateOrderPage />} />
-                <Route path="/orders/:id" element={<OrderDetailPage />} />
+                <Route path="/orders/:orderNumber" element={<OrderDetailPage />} />
             </Routes>
         </BrowserRouter>
     );

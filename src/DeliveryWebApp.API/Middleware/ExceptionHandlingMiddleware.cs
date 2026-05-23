@@ -20,6 +20,11 @@ public class ExceptionHandlingMiddleware
         {
             await _next(context);
         }
+        catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
+        {
+            _logger.LogInformation("Запрос был оменен клиентом");
+            context.Response.StatusCode = StatusCodes.Status499ClientClosedRequest;
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Необработанное исключение: {Message}", ex.Message);

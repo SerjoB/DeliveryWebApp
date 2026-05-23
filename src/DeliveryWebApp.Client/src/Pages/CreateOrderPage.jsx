@@ -1,47 +1,9 @@
-﻿import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ordersApi } from "../Api/ordersApi";
-
-const initialForm = {
-    senderCity: "",
-    senderAddress: "",
-    receiverCity: "",
-    receiverAddress: "",
-    weightKg: "",
-    pickupDate: "",
-};
+﻿import { useNavigate } from "react-router-dom";
+import { useOrderForm } from "../Hooks/useOrderForm";
 
 export default function CreateOrderPage() {
-    const [form, setForm] = useState(initialForm);
-    const [error, setError] = useState(null);
-    const [submitting, setSubmitting] = useState(false);
     const navigate = useNavigate();
-
-    const today = new Date().toISOString().split("T")[0];
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setSubmitting(true);
-        setError(null);
-
-        try {
-            const payload = {
-                ...form,
-                weightKg: parseFloat(form.weightKg),
-            };
-            const order = await ordersApi.create(payload);
-            navigate(`/orders/${order.id}`);
-        } catch (e) {
-            setError(e.message);
-        } finally {
-            setSubmitting(false);
-        }
-    };
+    const { form, errors, submitting, today, handleChange, handleSubmit } = useOrderForm();
 
     return (
         <div className="container mt-4">
@@ -51,8 +13,8 @@ export default function CreateOrderPage() {
                         <div className="card-body">
                             <h1 className="card-title h3 mb-4">Создать заказ</h1>
 
-                            {error && (
-                                <div className="alert alert-danger">{error}</div>
+                            {errors.general && (
+                                <div className="alert alert-danger">{errors.general}</div>
                             )}
 
                             <form onSubmit={handleSubmit}>
@@ -61,24 +23,30 @@ export default function CreateOrderPage() {
                                     <div className="mb-3">
                                         <label className="form-label">Город</label>
                                         <input
-                                            className="form-control"
+                                            className={`form-control ${errors.senderCity ? "is-invalid" : ""}`}
                                             name="senderCity"
                                             value={form.senderCity}
                                             onChange={handleChange}
                                             placeholder="Москва"
                                             required
                                         />
+                                        {errors.senderCity && (
+                                            <div className="invalid-feedback">{errors.senderCity}</div>
+                                        )}
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Адрес</label>
                                         <input
-                                            className="form-control"
+                                            className={`form-control ${errors.senderAddress ? "is-invalid" : ""}`}
                                             name="senderAddress"
                                             value={form.senderAddress}
                                             onChange={handleChange}
                                             placeholder="ул. Ленина, д. 1"
                                             required
                                         />
+                                        {errors.senderAddress && (
+                                            <div className="invalid-feedback">{errors.senderAddress}</div>
+                                        )}
                                     </div>
                                 </fieldset>
 
@@ -87,31 +55,37 @@ export default function CreateOrderPage() {
                                     <div className="mb-3">
                                         <label className="form-label">Город</label>
                                         <input
-                                            className="form-control"
+                                            className={`form-control ${errors.receiverCity ? "is-invalid" : ""}`}
                                             name="receiverCity"
                                             value={form.receiverCity}
                                             onChange={handleChange}
                                             placeholder="Санкт-Петербург"
                                             required
                                         />
+                                        {errors.receiverCity && (
+                                            <div className="invalid-feedback">{errors.receiverCity}</div>
+                                        )}
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Адрес</label>
                                         <input
-                                            className="form-control"
+                                            className={`form-control ${errors.receiverAddress ? "is-invalid" : ""}`}
                                             name="receiverAddress"
                                             value={form.receiverAddress}
                                             onChange={handleChange}
                                             placeholder="ул. Пушкина, д. 10"
                                             required
                                         />
+                                        {errors.receiverAddress && (
+                                            <div className="invalid-feedback">{errors.receiverAddress}</div>
+                                        )}
                                     </div>
                                 </fieldset>
 
                                 <div className="mb-3">
                                     <label className="form-label">Вес груза (кг)</label>
                                     <input
-                                        className="form-control"
+                                        className={`form-control ${errors.weightKg ? "is-invalid" : ""}`}
                                         name="weightKg"
                                         type="number"
                                         step="0.1"
@@ -122,12 +96,15 @@ export default function CreateOrderPage() {
                                         placeholder="10.5"
                                         required
                                     />
+                                    {errors.weightKg && (
+                                        <div className="invalid-feedback">{errors.weightKg}</div>
+                                    )}
                                 </div>
 
                                 <div className="mb-4">
                                     <label className="form-label">Дата забора груза</label>
                                     <input
-                                        className="form-control"
+                                        className={`form-control ${errors.pickupDate ? "is-invalid" : ""}`}
                                         name="pickupDate"
                                         type="date"
                                         min={today}
@@ -135,6 +112,9 @@ export default function CreateOrderPage() {
                                         onChange={handleChange}
                                         required
                                     />
+                                    {errors.pickupDate && (
+                                        <div className="invalid-feedback">{errors.pickupDate}</div>
+                                    )}
                                 </div>
 
                                 <div className="d-flex gap-2">

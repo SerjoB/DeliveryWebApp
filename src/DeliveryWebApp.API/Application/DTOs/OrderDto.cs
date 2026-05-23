@@ -11,7 +11,7 @@ public class OrderDto
     public string ReceiverCity { get; init; } = string.Empty;
     public string ReceiverAddress { get; init; } = string.Empty;
 
-    public double WeightKg { get; init; }
+    public decimal WeightKg { get; init; }
     public DateOnly PickupDate { get; init; }
 
     public DateTime CreatedAt { get; init; }

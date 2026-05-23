@@ -15,19 +15,28 @@ public class OrderRepository : IOrderRepository
 
     public async Task<(List<Order> Items, int TotalCount)> GetAllAsync(int page, int pageSize, CancellationToken ct = default)
     {
-        var totalCount = await _context.Orders.CountAsync(ct);
-
-        var items = await _context.Orders
+        var query = await _context.Orders
+            .AsNoTracking()
             .OrderByDescending(o => o.CreatedAt)
+            .Select(o => new
+            {
+                Order = o,
+                TotalCount = _context.Orders.Count()
+            })
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(ct);
 
+        var totalCount = query.FirstOrDefault()?.TotalCount ?? 0;
+        var items = query.Select(q => q.Order).ToList();
+
         return (items, totalCount);
     }
 
-    public Task<Order?> GetByIdAsync(int id, CancellationToken ct = default) =>
-        _context.Orders.FirstOrDefaultAsync(o => o.Id == id, ct);
+    public Task<Order?> GetByOrderNumberAsync(string orderNumber, CancellationToken ct = default) =>
+        _context.Orders
+            .AsNoTracking()
+            .FirstOrDefaultAsync(o => o.OrderNumber == orderNumber, ct);
 
     public async Task AddAsync(Order order, CancellationToken ct = default) =>
         await _context.Orders.AddAsync(order, ct);

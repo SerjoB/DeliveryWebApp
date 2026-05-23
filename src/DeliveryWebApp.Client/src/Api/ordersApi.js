@@ -4,24 +4,24 @@ const BASE_URL = config.apiUrl;
 const handleResponse = async (response) => {
     if (!response.ok) {
         const error = await response.json().catch(() => ({}));
-        
+
         if (error.errors) {
-            const messages = Object.values(error.errors).flat().join(", ");
-            throw new Error(messages);
+            const validationError = new Error("Validation error");
+            validationError.fields = error.errors;
+            throw validationError;
         }
-        
+
         throw new Error(error.message || "Ошибка сервера");
     }
     return response.json();
 };
-
 export const ordersApi = {
     getAll: (page = 1, pageSize = 10) =>
         fetch(`${BASE_URL}/orders?page=${page}&pageSize=${pageSize}`)
             .then(handleResponse),
 
-    getById: (id) =>
-        fetch(`${BASE_URL}/orders/${id}`).then(handleResponse),
+    getByOrderNumber: (orderNumber) =>
+        fetch(`${BASE_URL}/orders/${orderNumber}`).then(handleResponse),
 
     create: (data) =>
         fetch(`${BASE_URL}/orders`, {

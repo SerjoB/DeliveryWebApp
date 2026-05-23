@@ -1,17 +1,20 @@
-﻿import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ordersApi } from "../Api/ordersApi";
-import { useAsync } from "../Hooks/useAsync";
+﻿import { useNavigate, useSearchParams } from "react-router-dom";
+import { ordersApi } from "../api/ordersApi";
+import { useAsync } from "../hooks/useAsync";
 
 export default function OrderListPage() {
-    const [page, setPage] = useState(1);
-    const pageSize = 10;
+    const [searchParams, setSearchParams] = useSearchParams();
+    const page = parseInt(searchParams.get("page") ?? "1");
     const navigate = useNavigate();
 
     const { data, loading, error } = useAsync(
-        () => ordersApi.getAll(page, pageSize),
+        () => ordersApi.getAll(page),
         [page]
     );
+
+    const handlePageChange = (newPage) => {
+        setSearchParams({ page: newPage });
+    };
 
     if (loading) return (
         <div className="d-flex justify-content-center mt-5">
@@ -58,7 +61,7 @@ export default function OrderListPage() {
                             {data?.items?.map((order) => (
                                 <tr
                                     key={order.id}
-                                    onClick={() => navigate(`/orders/${order.id}`)}
+                                    onClick={() => navigate(`/orders/${order.orderNumber}`)}
                                     style={{ cursor: "pointer" }}
                                 >
                                     <td>{order.orderNumber}</td>
@@ -89,7 +92,7 @@ export default function OrderListPage() {
                                 <li className={`page-item ${!data?.hasPrevious ? "disabled" : ""}`}>
                                     <button
                                         className="page-link"
-                                        onClick={() => setPage(p => p - 1)}
+                                        onClick={() => handlePageChange(page - 1)}
                                         disabled={!data?.hasPrevious}
                                     >
                                         ←
@@ -99,7 +102,7 @@ export default function OrderListPage() {
                                     <li key={p} className={`page-item ${p === page ? "active" : ""}`}>
                                         <button
                                             className="page-link"
-                                            onClick={() => setPage(p)}
+                                            onClick={() => handlePageChange(p)}
                                         >
                                             {p}
                                         </button>
@@ -108,7 +111,7 @@ export default function OrderListPage() {
                                 <li className={`page-item ${!data?.hasNext ? "disabled" : ""}`}>
                                     <button
                                         className="page-link"
-                                        onClick={() => setPage(p => p + 1)}
+                                        onClick={() => handlePageChange(page + 1)}
                                         disabled={!data?.hasNext}
                                     >
                                         →

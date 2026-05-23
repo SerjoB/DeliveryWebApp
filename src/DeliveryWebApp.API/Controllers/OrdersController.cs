@@ -27,16 +27,16 @@ public class OrdersController : ControllerBase
         return Ok(result);
     }
 
-    // GET api/orders/id
-    [HttpGet("{id:int}")]
+    // GET api/orders/orderNumber
+    [HttpGet("{orderNumber}")]
     [ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById(int id, CancellationToken ct = default)
+    public async Task<IActionResult> GetByOrderNumber(string orderNumber, CancellationToken ct = default)
     {
-        var order = await _orderService.GetByIdAsync(id, ct);
+        var order = await _orderService.GetByOrderNumberAsync(orderNumber, ct);
 
         if (order is null)
-            return NotFound(new { message = $"Заказ с id={id} не найден" });
+            return NotFound(new { message = $"Заказ с orderNumber={orderNumber} не найден" });
 
         return Ok(order);
     }
@@ -48,6 +48,6 @@ public class OrdersController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateOrderDto dto, CancellationToken ct = default)
     {
         var order = await _orderService.CreateAsync(dto, ct);
-        return CreatedAtAction(nameof(GetById), new { id = order.Id }, order);
+        return CreatedAtAction(nameof(GetByOrderNumber), new { orderNumber = order.OrderNumber }, order);
     }
 }
